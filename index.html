@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>360&deg; Image Gallery</title>
+    <meta name="description" content="360&deg; Image Gallery - A-Frame">
+    <script src="https://aframe.io/releases/0.5.0/aframe.min.js"></script>
+   
+  </head>
+  <body>
+    <a-scene>
+      
+      <a-assets>
+        <img id="city" crossorigin="anonymous" src="https://201610433.github.io/Image/w19.jpg">
+        <img id="city-thumb" crossorigin="anonymous" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/thumb-city.jpg">
+        <img id="cubes-thumb" crossorigin="anonymous" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/thumb-cubes.jpg">
+        <img id="sechelt-thumb" crossorigin="anonymous" src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/thumb-sechelt.jpg">
+        <audio id="click-sound" crossorigin="anonymous" src="https://cdn.aframe.io/360-image-gallery-boilerplate/audio/click.ogg"></audio>
+        <img id="cubes" crossorigin="anonymous" src="https://201610433.github.io/Image1/snowing.jpg">
+        <img id="sechelt" crossorigin="anonymous" src="https://201610433.github.io/Image2/bad.jpg">
+ 
+      </a-assets>
+ 
+       <!-- 360-degree image. -->
+      <a-sky id="image-360_2" radius="10" src="#city"></a-sky>
+ 
+      <!-- Camera + cursor. -->
+        <a-entity position="0 0 1">
+        <a-camera look-controls>
+                  <a-cursor color="yellow"></a-cursor>
+        </a-camera>
+      </a-entity>
+       
+  <!-- 360-degree image. -->
+      <a-sky id="image-360" radius="10" src="#city">
+            <a-animation attribute="material.color" from="black" to="white" dur="1000" begin="fade"></a-animation>
+      </a-sky>
+    
+      
+      <!--  Image Links. -->
+          <a-text onclick="changeImage('#city'); showText(sunny);" align="center" value="Sunny" position="-2 -1 -4" geometry="primitive:circle; radius: 0.6"></a-text>
+          <a-text onclick="changeImage('#cubes'); showText(snowing);" align="center" value="Snowing" position="0 -1 -4" geometry="primitive:circle; radius: 0.6"></a-text>      
+          <a-text onclick="changeImage('#sechelt'); showText(cloudy);" align="center" value="Cloudy" position="2 -1 -4" geometry="primitive:circle; radius: 0.6"></a-text>
+    
+      <!--  Text Object for fading.-->
+          <a-text id="showText" align="center" color="white" value="Image 1, 2 3" position="0 2.5 -4" opacity="0">
+              <a-animation attribute="position"
+                           dur="2000"
+                           from="0 2.5 -4" 
+                           to="0 1.75 -4"
+                           begin="move">
+              </a-animation>
+              <a-animation attribute="opacity" dur="1500" begin="fade" to="1">
+              </a-animation>
+            
+          </a-text>
+ 
+
+      <a-box  position="-2 0.5 -4" rotation="0 0 0" color="#4CC3D9" shadow>
+              <a-animation attribute="rotation"
+              dur="3000"
+              fill="forwards"
+              to="0 360 0"
+              repeat="indefinite"
+              easing="linear">
+              </a-animation>
+              <a-box  position="1 1 0" rotation="0 0 0" color="red" scale="0.3 0.3 0.3" shadow>
+              </a-box>
+        
+      </a-box>  
+      
+              
+        <a-sphere id="obj1" visible="true" onclick="" position="0 1.25 -9" radius="1.25" color="#EF2D5E" shadow>
+          <a-animation attribute="position"
+              dur="5000"
+              fill="backwards"
+              direction= "alternate"
+              to="1 3.25 -5"
+              repeat="indefinite"
+              easing="ease-bounce">
+              </a-animation>
+           </a-sphere>
+
+        <a-cylinder id="obj2" onclick="" position="3 0.75 -5" radius="0.5" height="1.5" color="#FFC65D" shadow>
+          <a-animation attribute="rotation"
+              dur="3000"
+              fill="forwards"
+              to="360 0 0"
+              begin="start"
+              repeat="indefinite"
+              easing="linear">
+              </a-animation> 
+        
+              <a-animation attribute="position"
+              dur="5000"
+              fill="forwards"
+              direction= "alternate"
+              to="1 3.75 -3"
+              repeat="indefinite"
+              easing="ease-in-out">
+              </a-animation>
+      </a-cylinder>
+
+
+        <a-tours></a-tours>
+    </a-scene>
+    
+    <script>
+      
+      
+    var sunny= 'W19 is Endicott Building. This building was built in 2018. Weather is sunny and nice.';
+            
+    var snowing= 'W19 is Endicott Building. This building was built in 2018. Weather is snowing and cold.';
+          
+    var cloudy= 'W19 is Endicott Building. This building was built in 2018. Weather is cloudy and bad.';
+            
+      
+    function changeImage(imageName)
+      {
+        //1. Find the sky image element (HTML).
+        var myImg= document.getElementById("image-360");
+      
+        //2. Change the image src attribute.
+        myImg.setAttribute( 'src' ,imageName);
+        
+        //3. Call the animation for fade in.
+        myImg.emit('fade');
+        
+      }
+      
+    function showText(textContent)
+      {
+        //0.Find the textElement
+        var textElement= document.getElementById("showText");
+        
+        //1.Hide the text.
+        textElement.setAttribute("opacity", "0");
+        
+        //2.Update the 0text value.
+        textElement.setAttribute("value", textContent);
+        
+        //3.Call the fade-in and lowering text animation.
+        textElement.emit('move');
+        textElement.emit('fade');
+      }
+    
+    var animation1= "<a-animation attribute='rotation' dur='3000' "+
+                    " fill='forwards' to='0 360 0' "+
+                    " repeat='indefinite' easing='linear'></a-animation>"
+    
+    function addAnimation(el)
+    {
+      el.innerHTML= animation1;
+    }
+    
+    function startAnimation(el)
+    {
+      el.emit("start");    
+    }  
+
+    
+
+
+    </script>
+  
+  </body>
+</html>
